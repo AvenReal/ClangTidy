@@ -11,18 +11,35 @@ A standalone static analysis style checker for C projects (`.c` and `.h` files),
 
 Violations are reported with file locations and contextual descriptions formatted for terminal inspection.
 
+## Installation
+
+### As a python script
+
+```sh
+curl https://raw.githubusercontent.com/AvenReal/ClangTidy/refs/heads/master/src/style_checker.py ./style_checker.py
+```
+
+### As a shell command
+
+```sh
+curl https://raw.githubusercontent.com/AvenReal/ClangTidy/refs/heads/master/src/style_checker.py ~/.local/bin/style_checker
+```
+
+### As a git precommit
+
+```sh
+curl https://raw.githubusercontent.com/AvenReal/ClangTidy/refs/heads/master/src/style_checker.py ~/.local/bin/style_checker
+echo "style_checker ./ [list of arguments] " >> ./git/hooks/pre-commit
+```
+
 ## Directory Layout
 
 ```text
 .
 ├── README.md                          # Project overview, usage, and test instructions
 ├── coding_style.md                    # Complete specification of all Error (1.x) and Warning (2.x) rules
-├── src/
-│   └── style_checker.py               # Main CLI style checker and C structural analyzer
-└── tests/
-    ├── test_style_checker.py          # Unit and integration tests for rules and CLI flags
-    ├── test_e2e_style_checker.py      # End-to-end feature and regression tests
-    └── test_adversarial_harness.py    # Adversarial edge-case and CLI option tests
+└── src/
+    └── style_checker.py               # Main CLI style checker and C structural analyzer
 ```
 
 ## Dependencies
@@ -39,18 +56,18 @@ python3 src/style_checker.py [OPTIONS] <path>
 
 ### Options
 
-| Flag(s) | Default | Description |
-| :--- | :--- | :--- |
-| `-h`, `--help` | — | Show help message and exit |
-| `--line`, `--lines`, `--max-func-lines N` | `30` | Maximum allowed lines in a function body before reporting `1.6 fun.len` |
-| `--warn-func-lines`, `--warn-lines N` | `25` | Soft warning limit for function body length (`2.1 fun.len`) |
-| `--max-exported-globals`, `--max-exported-other N` | `1` | Maximum non-function exported symbols per source file (`1.3 export.other`) |
-| `--max-exported-funcs`, `--max-exported-functions N` | `10` | Maximum exported functions per source file (`1.4 export.fun`) |
-| `--max-func-args`, `--max-args N` | `4` | Maximum parameters per function (`1.5 fun.arg.count`) |
-| `--max-indent-level`, `--max-indent N` | `3` | Maximum indentation depth in units of 4 spaces (`2.2 indent.level`) |
-| `--max-decls-per-line`, `--max-decls N` | `1` | Maximum declarations on a single line outside `for` (`1.17 decl.single`) |
-| `--max-casts N` | `0` | Maximum explicit C casts across non-test source/header files (`1.1 cast`) |
-| `--IgnoreW`, `--ignore-w` | `False` | Suppress all warning checks (`2.x`) |
+| Flag(s)                                              | Default | Description                                                                |
+| :--------------------------------------------------- | :------ | :------------------------------------------------------------------------- |
+| `-h`, `--help`                                       | —       | Show help message and exit                                                 |
+| `--line`, `--lines`, `--max-func-lines N`            | `30`    | Maximum allowed lines in a function body before reporting `1.6 fun.len`    |
+| `--warn-func-lines`, `--warn-lines N`                | `25`    | Soft warning limit for function body length (`2.1 fun.len`)                |
+| `--max-exported-globals`, `--max-exported-other N`   | `1`     | Maximum non-function exported symbols per source file (`1.3 export.other`) |
+| `--max-exported-funcs`, `--max-exported-functions N` | `10`    | Maximum exported functions per source file (`1.4 export.fun`)              |
+| `--max-func-args`, `--max-args N`                    | `4`     | Maximum parameters per function (`1.5 fun.arg.count`)                      |
+| `--max-indent-level`, `--max-indent N`               | `3`     | Maximum indentation depth in units of 4 spaces (`2.2 indent.level`)        |
+| `--max-decls-per-line`, `--max-decls N`              | `1`     | Maximum declarations on a single line outside `for` (`1.17 decl.single`)   |
+| `--max-casts N`                                      | `0`     | Maximum explicit C casts across non-test source/header files (`1.1 cast`)  |
+| `--IgnoreW`, `--ignore-w`                            | `False` | Suppress all warning checks (`2.x`)                                        |
 
 ### Examples
 

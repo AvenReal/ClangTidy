@@ -1,0 +1,4 @@
+src/style_checker_and_stuff.py
+tests/test_adversarial_harness.py
+tests/test_e2e_style_checker.py
+tests/test_style_checker.py
