@@ -3501,7 +3501,9 @@ def print_report(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Coding Style Checker (v1.0.0)")
+    parser = argparse.ArgumentParser(
+        description="Coding Style Checker (v1.0.0)\nBy AvenReal (ang Gemini)"
+    )
     parser.add_argument(
         "path",
         help="Root directory to recursively scan for .c and .h files",

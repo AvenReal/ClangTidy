@@ -1,5 +1,7 @@
 # C Coding Style Checker
 
+Made by AvenReal (and Gemini (99% by Gemini)).
+
 A standalone static analysis style checker for C projects (`.c` and `.h` files), powered by a custom C tokenizer and structural analyzer.
 
 ## Overview
@@ -29,7 +31,13 @@ curl https://raw.githubusercontent.com/AvenReal/ClangTidy/refs/heads/master/src/
 
 ```sh
 curl https://raw.githubusercontent.com/AvenReal/ClangTidy/refs/heads/master/src/style_checker.py ~/.local/bin/style_checker
-echo "style_checker ./ [list of arguments] " >> ./git/hooks/pre-commit
+echo "style_checker [list of arguments] ./" >> ./git/hooks/pre-commit
+```
+
+### Uninstall
+
+```sh
+rm ~/.local/bin/style_checker
 ```
 
 ## Directory Layout
@@ -48,8 +56,16 @@ echo "style_checker ./ [list of arguments] " >> ./git/hooks/pre-commit
 
 ## CLI Usage
 
-```bash
-python3 src/style_checker.py [OPTIONS] <path>
+### As a python script
+
+```sh
+python3 path/to/style_checker.py [OPTIONS] /path/to/project/
+```
+
+or
+
+```sh
+style_checker [OPTIONS] /path/to/project/
 ```
 
 `<path>` can be either a root directory (scanned recursively for `.c` and `.h` files, skipping dotfiles/directories) or a single `.c`/`.h` file.
