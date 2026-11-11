@@ -7,7 +7,7 @@ A standalone static analysis style checker for C projects (`.c` and `.h` files),
 `src/style_checker.py` recursively scans a target directory (or checks a single `.c`/`.h` file) against 42 coding style rules partitioned into:
 
 - **Errors (`1.1` – `1.36`)**: Mandatory style rules (`[[Error]]`) that cause a non-zero exit status (`1`).
-- **Warnings (`2.1` – `2.6`)**: Advisory style rules (`[[Warning]]`) that do not fail the exit code (`0` when no errors are present) and can be suppressed with `--IgnoreW`.
+- **Warnings (`2.1` – `2.6`)**: Advisory style rules (`[[Warning]]`) that do not fail the exit code (`0` when no errors are present) and can be suppressed with `--ignore-warnings`.
 
 Violations are reported with file locations and contextual descriptions formatted for terminal inspection.
 
@@ -148,7 +148,7 @@ All 36 Error rules result in a non-zero exit status (`1`) if violated:
 
 ### Standard Warnings (`2.1` – `2.6`)
 
-All 6 Warning rules provide advisory feedback, exit with `0` when no errors exist, and can be suppressed via `--IgnoreW`:
+All 6 Warning rules provide advisory feedback, exit with `0` when no errors exist, and can be suppressed via `--ignore-warnings`:
 
 - `2.1 fun.len`: Soft warning on function length, default > 25 lines (configurable via `--warn-func-lines` or `--warn-lines`)
 - `2.2 indent.level`: Indentation depth must not exceed 3 levels / 12 spaces (configurable via `--max-indent-level`)
@@ -156,19 +156,3 @@ All 6 Warning rules provide advisory feedback, exit with `0` when no errors exis
 - `2.4 enum.comma`: Trailing comma on the last enumerator in `enum` definitions
 - `2.5 file.deadcode`: No commented-out code (`//`, `/* */`, and `#if 0`)
 - `2.6 comment.multi`: Multi-line comment delimiters on own line, intermediary lines start with `**`
-
-## Running Tests
-
-Run the entire test suite (unit, E2E, and adversarial tests) from the repository root:
-
-```bash
-python3 -B -m unittest discover -s tests -v
-```
-
-Run an individual test module:
-
-```bash
-python3 -B -m unittest tests.test_style_checker -v
-python3 -B -m unittest tests.test_e2e_style_checker -v
-python3 -B -m unittest tests.test_adversarial_harness -v
-```

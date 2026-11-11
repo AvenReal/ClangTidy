@@ -49,39 +49,130 @@ class RuleViolation:
             rule_sort,
             self.filepath,
             self.line if self.line is not None else 0,
-            self.end_line if self.end_line is not None else (self.line if self.line is not None else 0),
+            self.end_line
+            if self.end_line is not None
+            else (self.line if self.line is not None else 0),
         )
 
 
 C_KEYWORDS = {
-    "auto", "break", "case", "char", "const", "continue", "default", "do",
-    "double", "else", "enum", "extern", "float", "for", "goto", "if",
-    "inline", "int", "long", "register", "restrict", "return", "short",
-    "signed", "sizeof", "static", "struct", "switch", "typedef", "union",
-    "unsigned", "void", "volatile", "while", "_Alignas", "_Alignof",
-    "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn",
-    "_Static_assert", "_Thread_local"
+    "auto",
+    "break",
+    "case",
+    "char",
+    "const",
+    "continue",
+    "default",
+    "do",
+    "double",
+    "else",
+    "enum",
+    "extern",
+    "float",
+    "for",
+    "goto",
+    "if",
+    "inline",
+    "int",
+    "long",
+    "register",
+    "restrict",
+    "return",
+    "short",
+    "signed",
+    "sizeof",
+    "static",
+    "struct",
+    "switch",
+    "typedef",
+    "union",
+    "unsigned",
+    "void",
+    "volatile",
+    "while",
+    "_Alignas",
+    "_Alignof",
+    "_Atomic",
+    "_Bool",
+    "_Complex",
+    "_Generic",
+    "_Imaginary",
+    "_Noreturn",
+    "_Static_assert",
+    "_Thread_local",
 }
 
 STANDARD_TYPES = {
-    "void", "char", "short", "int", "long", "float", "double", "signed",
-    "unsigned", "size_t", "ssize_t", "off_t", "ptrdiff_t", "intptr_t",
-    "uintptr_t", "int8_t", "int16_t", "int32_t", "int64_t", "uint8_t",
-    "uint16_t", "uint32_t", "uint64_t", "int_least8_t", "uint_least8_t",
-    "int_fast8_t", "uint_fast8_t", "intmax_t", "uintmax_t", "bool", "_Bool",
-    "_Complex", "_Imaginary", "FILE", "DIR", "va_list", "jmp_buf", "sigjmp_buf",
-    "fpos_t", "div_t", "ldiv_t", "lldiv_t", "imaxdiv_t", "max_align_t",
-    "wchar_t", "wint_t", "mbstate_t"
+    "void",
+    "char",
+    "short",
+    "int",
+    "long",
+    "float",
+    "double",
+    "signed",
+    "unsigned",
+    "size_t",
+    "ssize_t",
+    "off_t",
+    "ptrdiff_t",
+    "intptr_t",
+    "uintptr_t",
+    "int8_t",
+    "int16_t",
+    "int32_t",
+    "int64_t",
+    "uint8_t",
+    "uint16_t",
+    "uint32_t",
+    "uint64_t",
+    "int_least8_t",
+    "uint_least8_t",
+    "int_fast8_t",
+    "uint_fast8_t",
+    "intmax_t",
+    "uintmax_t",
+    "bool",
+    "_Bool",
+    "_Complex",
+    "_Imaginary",
+    "FILE",
+    "DIR",
+    "va_list",
+    "jmp_buf",
+    "sigjmp_buf",
+    "fpos_t",
+    "div_t",
+    "ldiv_t",
+    "lldiv_t",
+    "imaxdiv_t",
+    "max_align_t",
+    "wchar_t",
+    "wint_t",
+    "mbstate_t",
 }
 
-TYPE_QUALIFIERS = {"const", "volatile", "restrict", "__restrict", "__restrict__", "signed", "unsigned", "short", "long", "_Atomic"}
+TYPE_QUALIFIERS = {
+    "const",
+    "volatile",
+    "restrict",
+    "__restrict",
+    "__restrict__",
+    "signed",
+    "unsigned",
+    "short",
+    "long",
+    "_Atomic",
+}
 
 TRIGRAPHS = ["??=", "??(", "??/", "??)", "??'", "??<", "??!", "??>", "??-"]
 DIGRAPHS = ["<%", "%>", "<:", ":>", "%:%:", "%:"]
 
 
 class Token:
-    def __init__(self, kind: str, value: str, line: int, col: int, end_line: int, end_col: int):
+    def __init__(
+        self, kind: str, value: str, line: int, col: int, end_line: int, end_col: int
+    ):
         self.kind = kind
         self.value = value
         self.line = line
@@ -93,7 +184,9 @@ class Token:
         return f"Token({self.kind}, {self.value!r}, L{self.line}:{self.col})"
 
 
-def skip_balanced(tokens: Sequence[Token], idx: int, open_tok: str = "{", close_tok: str = "}") -> int:
+def skip_balanced(
+    tokens: Sequence[Token], idx: int, open_tok: str = "{", close_tok: str = "}"
+) -> int:
     """Advance past matching balanced delimiters starting at idx (where tokens[idx].value == open_tok).
     Returns the index immediately following close_tok, or len(tokens) if unbalanced."""
     n = len(tokens)
@@ -174,7 +267,7 @@ def tokenize_c(code: str) -> List[Token]:
         nonlocal i, line, col
         ch = code[i]
         i += 1
-        if ch == '\n':
+        if ch == "\n":
             line += 1
             col = 1
         else:
@@ -182,9 +275,28 @@ def tokenize_c(code: str) -> List[Token]:
         return ch
 
     multi_ops = (
-        ">>=", "<<=", "...", "->", "++", "--", "<<", ">>", "<=", ">=",
-        "==", "!=", "&&", "||", "+=", "-=", "*=", "/=", "%=", "&=",
-        "^=", "|="
+        ">>=",
+        "<<=",
+        "...",
+        "->",
+        "++",
+        "--",
+        "<<",
+        ">>",
+        "<=",
+        ">=",
+        "==",
+        "!=",
+        "&&",
+        "||",
+        "+=",
+        "-=",
+        "*=",
+        "/=",
+        "%=",
+        "&=",
+        "^=",
+        "|=",
     )
 
     while i < n:
@@ -193,56 +305,60 @@ def tokenize_c(code: str) -> List[Token]:
         ch = code[i]
 
         # Horizontal whitespace fast-path
-        if ch in ' \t':
+        if ch in " \t":
             j = i + 1
-            while j < n and code[j] in ' \t':
+            while j < n and code[j] in " \t":
                 j += 1
-            col += (j - i)
+            col += j - i
             i = j
             continue
 
-        if ch == '\n':
+        if ch == "\n":
             i += 1
             line += 1
             col = 1
             continue
 
-        if ch == '\r':
+        if ch == "\r":
             i += 1
             col += 1
             continue
 
         # Line comment
-        if ch == '/' and i + 1 < n and code[i + 1] == '/':
+        if ch == "/" and i + 1 < n and code[i + 1] == "/":
             val = ""
             while i < n:
-                if code[i] == '\\' and i + 1 < n and code[i + 1] == '\n':
+                if code[i] == "\\" and i + 1 < n and code[i + 1] == "\n":
                     val += advance() + advance()
                     continue
-                if code[i] == '\\' and i + 2 < n and code[i + 1:i + 3] == '\r\n':
+                if code[i] == "\\" and i + 2 < n and code[i + 1 : i + 3] == "\r\n":
                     val += advance() + advance() + advance()
                     continue
-                if code[i] == '\n':
+                if code[i] == "\n":
                     break
                 val += advance()
-            tokens.append(Token("COMMENT_LINE", val, start_line, start_col, line, col - 1))
+            tokens.append(
+                Token("COMMENT_LINE", val, start_line, start_col, line, col - 1)
+            )
             continue
 
         # Block comment
-        if ch == '/' and i + 1 < n and code[i + 1] == '*':
+        if ch == "/" and i + 1 < n and code[i + 1] == "*":
             val = advance() + advance()
-            while i < n and code[i:i + 2] != '*/':
+            while i < n and code[i : i + 2] != "*/":
                 val += advance()
             if i < n:
                 val += advance() + advance()
-            tokens.append(Token("COMMENT_BLOCK", val, start_line, start_col, line, col - 1))
+            tokens.append(
+                Token("COMMENT_BLOCK", val, start_line, start_col, line, col - 1)
+            )
             continue
 
         # String literal
         if ch == '"':
             val = advance()
             while i < n and code[i] != '"':
-                if code[i] == '\\' and i + 1 < n:
+                if code[i] == "\\" and i + 1 < n:
                     val += advance()
                 val += advance()
             if i < n:
@@ -254,7 +370,7 @@ def tokenize_c(code: str) -> List[Token]:
         if ch == "'":
             val = advance()
             while i < n and code[i] != "'":
-                if code[i] == '\\' and i + 1 < n:
+                if code[i] == "\\" and i + 1 < n:
                     val += advance()
                 val += advance()
             if i < n:
@@ -263,27 +379,27 @@ def tokenize_c(code: str) -> List[Token]:
             continue
 
         # Preprocessor directive
-        if ch == '#':
+        if ch == "#":
             val = advance()
             deferred_comments: List[Token] = []
             while i < n:
-                if code[i] == '\\' and i + 1 < n and code[i + 1] == '\n':
+                if code[i] == "\\" and i + 1 < n and code[i + 1] == "\n":
                     val += advance() + advance()
                     continue
-                if code[i] == '\\' and i + 2 < n and code[i + 1:i + 3] == '\r\n':
+                if code[i] == "\\" and i + 2 < n and code[i + 1 : i + 3] == "\r\n":
                     val += advance() + advance() + advance()
                     continue
-                if code[i] == '\n':
+                if code[i] == "\n":
                     break
                 if code[i] in ('"', "'"):
                     q = code[i]
                     val += advance()
-                    while i < n and code[i] != q and code[i] != '\n':
-                        if code[i] == '\\' and i + 1 < n:
-                            if code[i + 1] == '\n':
+                    while i < n and code[i] != q and code[i] != "\n":
+                        if code[i] == "\\" and i + 1 < n:
+                            if code[i + 1] == "\n":
                                 val += advance() + advance()
                                 continue
-                            if code[i + 1:i + 3] == '\r\n':
+                            if code[i + 1 : i + 3] == "\r\n":
                                 val += advance() + advance() + advance()
                                 continue
                             val += advance()
@@ -291,67 +407,80 @@ def tokenize_c(code: str) -> List[Token]:
                     if i < n and code[i] == q:
                         val += advance()
                     continue
-                if code[i:i + 2] == '//':
-                    while i < n and code[i] != '\n':
-                        if code[i] == '\\' and i + 1 < n and code[i + 1] == '\n':
+                if code[i : i + 2] == "//":
+                    while i < n and code[i] != "\n":
+                        if code[i] == "\\" and i + 1 < n and code[i + 1] == "\n":
                             val += advance() + advance()
                             continue
-                        if code[i] == '\\' and i + 2 < n and code[i + 1:i + 3] == '\r\n':
+                        if (
+                            code[i] == "\\"
+                            and i + 2 < n
+                            and code[i + 1 : i + 3] == "\r\n"
+                        ):
                             val += advance() + advance() + advance()
                             continue
                         val += advance()
                     continue
-                if code[i:i + 2] == '/*':
-                    nl_pos = code.find('\n', i + 2)
-                    close_pos = code.find('*/', i + 2)
+                if code[i : i + 2] == "/*":
+                    nl_pos = code.find("\n", i + 2)
+                    close_pos = code.find("*/", i + 2)
                     if close_pos == -1 or (nl_pos != -1 and close_pos > nl_pos):
                         c_start_line, c_start_col = line, col
                         c_val = advance() + advance()
-                        while i < n and code[i:i + 2] != '*/':
+                        while i < n and code[i : i + 2] != "*/":
                             c_val += advance()
-                        if i < n and code[i:i + 2] == '*/':
+                        if i < n and code[i : i + 2] == "*/":
                             c_val += advance() + advance()
                         deferred_comments.append(
-                            Token("COMMENT_BLOCK", c_val, c_start_line, c_start_col, line, col - 1)
+                            Token(
+                                "COMMENT_BLOCK",
+                                c_val,
+                                c_start_line,
+                                c_start_col,
+                                line,
+                                col - 1,
+                            )
                         )
                         val += c_val
                         continue
-                    while i < n and code[i:i + 2] != '*/':
+                    while i < n and code[i : i + 2] != "*/":
                         val += advance()
-                    if i < n and code[i:i + 2] == '*/':
+                    if i < n and code[i : i + 2] == "*/":
                         val += advance() + advance()
                     continue
                 val += advance()
-            tokens.append(Token("PREPROCESSOR", val, start_line, start_col, line, col - 1))
+            tokens.append(
+                Token("PREPROCESSOR", val, start_line, start_col, line, col - 1)
+            )
             tokens.extend(deferred_comments)
             continue
 
         # Trigraphs
-        tri = code[i:i + 3]
+        tri = code[i : i + 3]
         if tri in TRIGRAPHS:
             val = advance() + advance() + advance()
             tokens.append(Token("TRIGRAPH", val, start_line, start_col, line, col - 1))
             continue
 
         # Digraphs
-        di4 = code[i:i + 4]
+        di4 = code[i : i + 4]
         if di4 == "%:%:":
             val = advance() + advance() + advance() + advance()
             tokens.append(Token("DIGRAPH", val, start_line, start_col, line, col - 1))
             continue
-        di2 = code[i:i + 2]
+        di2 = code[i : i + 2]
         if di2 in DIGRAPHS:
             val = advance() + advance()
             tokens.append(Token("DIGRAPH", val, start_line, start_col, line, col - 1))
             continue
 
         # Identifiers and keywords fast-path
-        if ch.isalpha() or ch == '_':
+        if ch.isalpha() or ch == "_":
             j = i + 1
-            while j < n and (code[j].isalnum() or code[j] == '_'):
+            while j < n and (code[j].isalnum() or code[j] == "_"):
                 j += 1
             val = code[i:j]
-            col += (j - i)
+            col += j - i
             i = j
             kind = "KEYWORD" if val in C_KEYWORDS else "IDENTIFIER"
             tokens.append(Token(kind, val, start_line, start_col, line, col - 1))
@@ -360,10 +489,10 @@ def tokenize_c(code: str) -> List[Token]:
         # Numbers fast-path
         if ch.isdigit():
             j = i + 1
-            while j < n and (code[j].isalnum() or code[j] in '._'):
+            while j < n and (code[j].isalnum() or code[j] in "._"):
                 j += 1
             val = code[i:j]
-            col += (j - i)
+            col += j - i
             i = j
             tokens.append(Token("NUMBER", val, start_line, start_col, line, col - 1))
             continue
@@ -378,30 +507,61 @@ def tokenize_c(code: str) -> List[Token]:
             op_len = len(matched_op)
             i += op_len
             col += op_len
-            tokens.append(Token("OPERATOR", matched_op, start_line, start_col, line, col - 1))
+            tokens.append(
+                Token("OPERATOR", matched_op, start_line, start_col, line, col - 1)
+            )
             continue
 
         # Single character punctuator
         ch = advance()
-        tokens.append(Token("PUNCTUATOR", ch, start_line, start_col, start_line, start_col))
+        tokens.append(
+            Token("PUNCTUATOR", ch, start_line, start_col, start_line, start_col)
+        )
 
     return tokens
 
 
-def extract_declarators_from_decl(tokens: List[Token], is_type_func) -> List[Tuple[str, int]]:
+def extract_declarators_from_decl(
+    tokens: List[Token], is_type_func
+) -> List[Tuple[str, int]]:
     """Extracts declared variable names from a declaration statement, properly skipping initializers."""
     var_names: List[Tuple[str, int]] = []
     n = len(tokens)
     i = 0
 
     spec_qualifiers = {
-        "typedef", "static", "extern", "const", "volatile", "register", "auto",
-        "inline", "restrict", "_Noreturn", "_Thread_local", "_Atomic",
-        "__extension__", "__inline", "__inline__", "__restrict", "__restrict__",
+        "typedef",
+        "static",
+        "extern",
+        "const",
+        "volatile",
+        "register",
+        "auto",
+        "inline",
+        "restrict",
+        "_Noreturn",
+        "_Thread_local",
+        "_Atomic",
+        "__extension__",
+        "__inline",
+        "__inline__",
+        "__restrict",
+        "__restrict__",
     }
     builtin_type_words = {
-        "void", "char", "short", "int", "long", "float", "double",
-        "signed", "unsigned", "bool", "_Bool", "_Complex", "_Imaginary",
+        "void",
+        "char",
+        "short",
+        "int",
+        "long",
+        "float",
+        "double",
+        "signed",
+        "unsigned",
+        "bool",
+        "_Bool",
+        "_Complex",
+        "_Imaginary",
     }
 
     saw_type = False
@@ -413,7 +573,14 @@ def extract_declarators_from_decl(tokens: List[Token], is_type_func) -> List[Tup
         if val in spec_qualifiers:
             i += 1
             continue
-        if val in ("_Alignas", "typeof", "__typeof__", "__typeof", "__attribute__", "__attribute"):
+        if val in (
+            "_Alignas",
+            "typeof",
+            "__typeof__",
+            "__typeof",
+            "__attribute__",
+            "__attribute",
+        ):
             i += 1
             while i < n and tokens[i].value == "(":
                 i = skip_balanced(tokens, i, "(", ")")
@@ -448,19 +615,35 @@ def extract_declarators_from_decl(tokens: List[Token], is_type_func) -> List[Tup
         break
 
     def parse_direct_declarator_name(idx: int) -> Tuple[Optional[Tuple[str, int]], int]:
-        while idx < n and (tokens[idx].value == "*" or tokens[idx].value in TYPE_QUALIFIERS):
+        while idx < n and (
+            tokens[idx].value == "*" or tokens[idx].value in TYPE_QUALIFIERS
+        ):
             idx += 1
         if idx >= n:
             return None, idx
         decl_id: Optional[Tuple[str, int]] = None
-        if tokens[idx].kind == "IDENTIFIER" and tokens[idx].value not in C_KEYWORDS and not is_type_func(tokens[idx].value):
+        if (
+            tokens[idx].kind == "IDENTIFIER"
+            and tokens[idx].value not in C_KEYWORDS
+            and not is_type_func(tokens[idx].value)
+        ):
             decl_id = (tokens[idx].value, tokens[idx].line)
             idx += 1
         elif tokens[idx].kind == "IDENTIFIER" and tokens[idx].value not in C_KEYWORDS:
             # Allow variable names that accidentally match an external typedef if followed by declarator punctuation
             if idx + 1 >= n or tokens[idx + 1].value in (
-                "=", ",", ";", "[", "(", ":", ")",
-                "__attribute__", "__attribute", "asm", "__asm__", "__asm",
+                "=",
+                ",",
+                ";",
+                "[",
+                "(",
+                ":",
+                ")",
+                "__attribute__",
+                "__attribute",
+                "asm",
+                "__asm__",
+                "__asm",
             ):
                 decl_id = (tokens[idx].value, tokens[idx].line)
                 idx += 1
@@ -487,7 +670,13 @@ def extract_declarators_from_decl(tokens: List[Token], is_type_func) -> List[Tup
             break
         var_names.append(decl_id)
 
-        while i < n and tokens[i].value in ("__attribute__", "__attribute", "asm", "__asm__", "__asm"):
+        while i < n and tokens[i].value in (
+            "__attribute__",
+            "__attribute",
+            "asm",
+            "__asm__",
+            "__asm",
+        ):
             i += 1
             while i < n and tokens[i].value == "(":
                 i = skip_balanced(tokens, i, "(", ")")
@@ -501,7 +690,6 @@ def extract_declarators_from_decl(tokens: List[Token], is_type_func) -> List[Tup
         break
 
     return var_names
-
 
 
 def has_top_level_specifier(tokens: List[Token], spec: str) -> bool:
@@ -581,7 +769,15 @@ class StyleChecker:
         end_line: Optional[int] = None,
     ):
         self.violations.append(
-            RuleViolation(rule_id, severity, description, filepath, line, message, end_line=end_line)
+            RuleViolation(
+                rule_id,
+                severity,
+                description,
+                filepath,
+                line,
+                message,
+                end_line=end_line,
+            )
         )
 
     def finalize_violations(self):
@@ -594,7 +790,7 @@ class StyleChecker:
                 if self.max_casts == 0
                 else f"At most {self.max_casts} explicit C casts allowed"
             )
-            for fpath, line, cast_type in self.project_casts[self.max_casts:]:
+            for fpath, line, cast_type in self.project_casts[self.max_casts :]:
                 self.add_violation(
                     "1.1 cast",
                     "Error",
@@ -613,7 +809,8 @@ class StyleChecker:
                 continue
             _, _, tokens = data
             code_toks = [
-                t for t in tokens
+                t
+                for t in tokens
                 if t.kind not in ("COMMENT_LINE", "COMMENT_BLOCK", "PREPROCESSOR")
             ]
             n = len(code_toks)
@@ -624,7 +821,11 @@ class StyleChecker:
                 t = code_toks[i]
                 if t.value == "typedef" and paren_depth == 0:
                     end_idx = find_statement_end(code_toks, i + 1)
-                    stmt_toks = code_toks[i:end_idx + 1] if end_idx < n else code_toks[i:end_idx]
+                    stmt_toks = (
+                        code_toks[i : end_idx + 1]
+                        if end_idx < n
+                        else code_toks[i:end_idx]
+                    )
                     for name, _ in extract_declarators_from_decl(stmt_toks, is_known):
                         self.known_typedefs.add(name)
                     i = end_idx + 1
@@ -652,7 +853,9 @@ class StyleChecker:
 
         # 1.32 file.dos (MUST): No CRLF line endings
         raw_lines_bytes = raw_bytes.split(b"\n")
-        check_lines_bytes = raw_lines_bytes[:-1] if raw_bytes.endswith(b"\n") else raw_lines_bytes
+        check_lines_bytes = (
+            raw_lines_bytes[:-1] if raw_bytes.endswith(b"\n") else raw_lines_bytes
+        )
         for idx, line_bytes in enumerate(check_lines_bytes, 1):
             if line_bytes.endswith(b"\r") or b"\r" in line_bytes:
                 self.add_violation(
@@ -701,7 +904,10 @@ class StyleChecker:
             first_non_empty = non_empty_indices[0]
             last_non_empty = non_empty_indices[-1]
             for idx in range(first_non_empty, last_non_empty):
-                if lines_content[idx].strip() == "" and lines_content[idx + 1].strip() == "":
+                if (
+                    lines_content[idx].strip() == ""
+                    and lines_content[idx + 1].strip() == ""
+                ):
                     self.add_violation(
                         "1.2 lines.empty",
                         "Error",
@@ -726,10 +932,14 @@ class StyleChecker:
                 if tok.end_line > tok.line or not is_closed:
                     start_line_text = lines_content[tok.line - 1]
                     pos_start = max(0, tok.col - 1)
-                    if start_line_text[pos_start:pos_start + 2] != "/*":
+                    if start_line_text[pos_start : pos_start + 2] != "/*":
                         pos_start = start_line_text.find("/*")
-                    before_delim = start_line_text[:pos_start] if pos_start != -1 else ""
-                    after_delim = start_line_text[pos_start + 2:] if pos_start != -1 else ""
+                    before_delim = (
+                        start_line_text[:pos_start] if pos_start != -1 else ""
+                    )
+                    after_delim = (
+                        start_line_text[pos_start + 2 :] if pos_start != -1 else ""
+                    )
                     if before_delim.strip() != "" or after_delim.strip() != "":
                         self.add_violation(
                             "2.6 comment.multi",
@@ -743,11 +953,18 @@ class StyleChecker:
                     if is_closed and tok.end_line - 1 < len(lines_content):
                         end_line_text = lines_content[tok.end_line - 1]
                         pos_end = tok.end_col - 2
-                        if pos_end < 0 or end_line_text[pos_end:pos_end + 2] != "*/":
+                        if pos_end < 0 or end_line_text[pos_end : pos_end + 2] != "*/":
                             pos_end = end_line_text.rfind("*/")
-                        before_end_delim = end_line_text[:pos_end] if pos_end != -1 else ""
-                        after_end_delim = end_line_text[pos_end + 2:] if pos_end != -1 else ""
-                        if before_end_delim.strip() != "" or after_end_delim.strip() != "":
+                        before_end_delim = (
+                            end_line_text[:pos_end] if pos_end != -1 else ""
+                        )
+                        after_end_delim = (
+                            end_line_text[pos_end + 2 :] if pos_end != -1 else ""
+                        )
+                        if (
+                            before_end_delim.strip() != ""
+                            or after_end_delim.strip() != ""
+                        ):
                             self.add_violation(
                                 "2.6 comment.multi",
                                 "Warning",
@@ -757,7 +974,9 @@ class StyleChecker:
                                 "Closing delimiter '*/' must appear on its own line",
                             )
                     else:
-                        report_end_line = max(tok.line, min(tok.end_line, len(lines_content)))
+                        report_end_line = max(
+                            tok.line, min(tok.end_line, len(lines_content))
+                        )
                         self.add_violation(
                             "2.6 comment.multi",
                             "Warning",
@@ -767,7 +986,11 @@ class StyleChecker:
                             "Closing delimiter '*/' must appear on its own line",
                         )
 
-                    inter_end = tok.end_line if is_closed else min(tok.end_line + 1, len(lines_content) + 1)
+                    inter_end = (
+                        tok.end_line
+                        if is_closed
+                        else min(tok.end_line + 1, len(lines_content) + 1)
+                    )
                     for inter_l in range(tok.line + 1, inter_end):
                         if inter_l - 1 >= len(lines_content):
                             continue
@@ -869,10 +1092,14 @@ class StyleChecker:
 
         # 3. Preprocessor checks
         prep_tokens = [tok for tok in tokens if tok.kind == "PREPROCESSOR"]
-        self._check_preprocessor(path, filepath_str, is_header, is_source, prep_tokens, lines_content)
+        self._check_preprocessor(
+            path, filepath_str, is_header, is_source, prep_tokens, lines_content
+        )
 
         # 4. Lexical and AST-like checks on tokens
-        self._check_code_tokens(path, filepath_str, is_header, is_source, tokens, lines_content)
+        self._check_code_tokens(
+            path, filepath_str, is_header, is_source, tokens, lines_content
+        )
         if self.target_files and self._checked_files >= set(self.target_files):
             self.finalize_violations()
 
@@ -880,10 +1107,21 @@ class StyleChecker:
         if not s:
             return False
         lower = s.lower()
-        if any(lower.startswith(k) for k in [
-            "return value", "return:", "returns:", "param:", "parameter:",
-            "author:", "started on", "last update", "made by", "login"
-        ]):
+        if any(
+            lower.startswith(k)
+            for k in [
+                "return value",
+                "return:",
+                "returns:",
+                "param:",
+                "parameter:",
+                "author:",
+                "started on",
+                "last update",
+                "made by",
+                "login",
+            ]
+        ):
             return False
         patterns = [
             r"^(?:int|char|void|long|short|float|double|size_t|[a-zA-Z_]\w*\*)\s+[a-zA-Z_]\w*(\s*=\s*[^;]+)?\s*;",
@@ -973,15 +1211,21 @@ class StyleChecker:
                     )
 
             # 2.3 cpp.include.order accumulation
-            m_inc_order = re.search(r"^#\s*include\s*([<\"])([^>\"]+)([>\"])", val.strip())
+            m_inc_order = re.search(
+                r"^#\s*include\s*([<\"])([^>\"]+)([>\"])", val.strip()
+            )
             if m_inc_order:
                 delim_open = m_inc_order.group(1)
                 inc_target = m_inc_order.group(2)
                 cat = 3  # LOCAL
                 stem = path.stem
-                if is_source and delim_open == '"' and Path(inc_target).name == f"{stem}.h":
+                if (
+                    is_source
+                    and delim_open == '"'
+                    and Path(inc_target).name == f"{stem}.h"
+                ):
                     cat = 1  # SAME_NAME
-                elif delim_open == '<':
+                elif delim_open == "<":
                     cat = 2  # SYSTEM
                 inc_list.append((tok.line, cat, inc_target, val.strip()))
 
@@ -991,7 +1235,10 @@ class StyleChecker:
             for prev_inc, cur_inc in zip(inc_list, inc_list[1:]):
                 prev_line = prev_inc[0]
                 cur_line = cur_inc[0]
-                has_empty = any(lines_content[l - 1].strip() == "" for l in range(prev_line + 1, cur_line))
+                has_empty = any(
+                    lines_content[l - 1].strip() == ""
+                    for l in range(prev_line + 1, cur_line)
+                )
                 if has_empty:
                     blocks.append(cur_block)
                     cur_block = [cur_inc]
@@ -1032,7 +1279,7 @@ class StyleChecker:
                             "Include blocks (same-name header, system headers, local headers) separated by empty line, alphabetical",
                             filepath_str,
                             b[idx + 1][0],
-                            f"Includes not in alphabetical order: '{targets[idx]}' appears before '{targets[idx+1]}'",
+                            f"Includes not in alphabetical order: '{targets[idx]}' appears before '{targets[idx + 1]}'",
                         )
                         break
 
@@ -1074,7 +1321,9 @@ class StyleChecker:
                         )
                     else:
                         second_tok = prep_tokens[1]
-                        m_def = re.match(r"^#\s*define\s+([a-zA-Z_]\w*)", second_tok.value)
+                        m_def = re.match(
+                            r"^#\s*define\s+([a-zA-Z_]\w*)", second_tok.value
+                        )
                         if not m_def or m_def.group(1) != guard_used:
                             self.add_violation(
                                 "1.12 cpp.guard",
@@ -1168,7 +1417,11 @@ class StyleChecker:
                 )
 
             # 1.20 stat.asm
-            elif tok.kind in ("KEYWORD", "IDENTIFIER") and tok.value in ("asm", "__asm__", "__asm"):
+            elif tok.kind in ("KEYWORD", "IDENTIFIER") and tok.value in (
+                "asm",
+                "__asm__",
+                "__asm",
+            ):
                 self.add_violation(
                     "1.20 stat.asm",
                     "Error",
@@ -1181,9 +1434,14 @@ class StyleChecker:
             # 1.36 name.struct
             elif tok.kind == "KEYWORD" and tok.value == "typedef":
                 next_idx = idx + 1
-                while next_idx < num_tokens and tokens[next_idx].value in TYPE_QUALIFIERS:
+                while (
+                    next_idx < num_tokens and tokens[next_idx].value in TYPE_QUALIFIERS
+                ):
                     next_idx += 1
-                if next_idx < num_tokens and tokens[next_idx].value in ("struct", "union"):
+                if next_idx < num_tokens and tokens[next_idx].value in (
+                    "struct",
+                    "union",
+                ):
                     self.add_violation(
                         "1.36 name.struct",
                         "Error",
@@ -1196,9 +1454,16 @@ class StyleChecker:
             # 1.8 else_if.indent
             elif tok.kind == "KEYWORD" and tok.value == "else":
                 k = idx + 1
-                while k < num_tokens and tokens[k].kind in ("COMMENT_LINE", "COMMENT_BLOCK"):
+                while k < num_tokens and tokens[k].kind in (
+                    "COMMENT_LINE",
+                    "COMMENT_BLOCK",
+                ):
                     k += 1
-                if k < num_tokens and tokens[k].kind == "KEYWORD" and tokens[k].value == "if":
+                if (
+                    k < num_tokens
+                    and tokens[k].kind == "KEYWORD"
+                    and tokens[k].value == "if"
+                ):
                     if tokens[k].line != tok.line:
                         self.add_violation(
                             "1.8 else_if.indent",
@@ -1210,7 +1475,11 @@ class StyleChecker:
                         )
 
             # 1.29 keyword.arg
-            elif tok.kind == "KEYWORD" and tok.value in ("sizeof", "typeof", "_Alignof"):
+            elif tok.kind == "KEYWORD" and tok.value in (
+                "sizeof",
+                "typeof",
+                "_Alignof",
+            ):
                 if idx + 1 < num_tokens and tokens[idx + 1].value != "(":
                     self.add_violation(
                         "1.29 keyword.arg",
@@ -1224,7 +1493,7 @@ class StyleChecker:
             # 1.30 semicolon
             elif tok.kind == "PUNCTUATOR" and tok.value == ";":
                 line_text = lines_content[tok.line - 1]
-                if tok.col > 1 and line_text[tok.col - 2] in (' ', '\t'):
+                if tok.col > 1 and line_text[tok.col - 2] in (" ", "\t"):
                     self.add_violation(
                         "1.30 semicolon",
                         "Error",
@@ -1235,7 +1504,18 @@ class StyleChecker:
                     )
                 if tok.col < len(line_text):
                     after_char = line_text[tok.col]
-                    if after_char not in (' ', '\t', '\r', '\n', ';', ')', '}', '/', '"', "'"):
+                    if after_char not in (
+                        " ",
+                        "\t",
+                        "\r",
+                        "\n",
+                        ";",
+                        ")",
+                        "}",
+                        "/",
+                        '"',
+                        "'",
+                    ):
                         self.add_violation(
                             "1.30 semicolon",
                             "Error",
@@ -1256,7 +1536,10 @@ class StyleChecker:
                         p_depth -= 1
                     elif tokens[j].kind == "PUNCTUATOR" and v == ":" and p_depth == 0:
                         line_text = lines_content[tokens[j].line - 1]
-                        if tokens[j].col > 1 and line_text[tokens[j].col - 2] in (' ', '\t'):
+                        if tokens[j].col > 1 and line_text[tokens[j].col - 2] in (
+                            " ",
+                            "\t",
+                        ):
                             self.add_violation(
                                 "1.25 ctrl.switch.padding",
                                 "Error",
@@ -1266,13 +1549,21 @@ class StyleChecker:
                                 f"No space allowed before ':' in {tok.value}",
                             )
                         break
-                    elif tokens[j].kind == "PUNCTUATOR" and v in (";", "{", "}") and p_depth == 0:
+                    elif (
+                        tokens[j].kind == "PUNCTUATOR"
+                        and v in (";", "{", "}")
+                        and p_depth == 0
+                    ):
                         break
 
             # 1.28 exp.args
             if tok.kind == "IDENTIFIER" and idx + 1 < num_tokens:
                 next_tok = tokens[idx + 1]
-                if next_tok.value == "(" and next_tok.line == tok.line and next_tok.col > tok.end_col + 1:
+                if (
+                    next_tok.value == "("
+                    and next_tok.line == tok.line
+                    and next_tok.col > tok.end_col + 1
+                ):
                     line_text = lines_content[tok.line - 1].strip()
                     if not line_text.startswith("#"):
                         self.add_violation(
@@ -1295,9 +1586,9 @@ class StyleChecker:
                 continue
             leading_spaces = 0
             for ch in line:
-                if ch == ' ':
+                if ch == " ":
                     leading_spaces += 1
-                elif ch == '\t':
+                elif ch == "\t":
                     leading_spaces += 4
                 else:
                     break
@@ -1334,10 +1625,16 @@ class StyleChecker:
                     end_line=(g_end if g_end > g_start else None),
                 )
 
-        code_tokens = [tok for tok in tokens if tok.kind not in ("COMMENT_LINE", "COMMENT_BLOCK", "PREPROCESSOR")]
+        code_tokens = [
+            tok
+            for tok in tokens
+            if tok.kind not in ("COMMENT_LINE", "COMMENT_BLOCK", "PREPROCESSOR")
+        ]
         self._check_casts(code_tokens, filepath_str)
         self._check_switches(code_tokens, tokens, filepath_str)
-        self._analyze_structure(path, filepath_str, is_header, is_source, code_tokens, tokens, lines_content)
+        self._analyze_structure(
+            path, filepath_str, is_header, is_source, code_tokens, tokens, lines_content
+        )
 
     def _is_type_token(self, val: str) -> bool:
         return is_c_type(val, self.known_typedefs)
@@ -1351,12 +1648,30 @@ class StyleChecker:
             if tok.value == "(":
                 prev_tok = code_tokens[i - 1] if i > 0 else None
                 # Exclude if, while, for, switch, sizeof, etc. and function calls
-                if prev_tok and (prev_tok.value in ("sizeof", "typeof", "_Alignof", "if", "while", "for", "switch") or prev_tok.kind == "IDENTIFIER"):
+                if prev_tok and (
+                    prev_tok.value
+                    in ("sizeof", "typeof", "_Alignof", "if", "while", "for", "switch")
+                    or prev_tok.kind == "IDENTIFIER"
+                ):
                     continue
                 cast_type, closing_paren_idx = self._parse_cast_type(code_tokens, i)
                 if cast_type and closing_paren_idx + 1 < n:
                     next_tok = code_tokens[closing_paren_idx + 1]
-                    if next_tok.kind in ("IDENTIFIER", "NUMBER", "STRING", "CHAR") or next_tok.value in ("(", "*", "&", "-", "+", "~", "!", "sizeof"):
+                    if next_tok.kind in (
+                        "IDENTIFIER",
+                        "NUMBER",
+                        "STRING",
+                        "CHAR",
+                    ) or next_tok.value in (
+                        "(",
+                        "*",
+                        "&",
+                        "-",
+                        "+",
+                        "~",
+                        "!",
+                        "sizeof",
+                    ):
                         self.project_casts.append((filepath_str, tok.line, cast_type))
 
     def _is_case_body_terminating(self, tokens: List[Token]) -> bool:
@@ -1404,14 +1719,24 @@ class StyleChecker:
 
         stmt_tokens = tokens[stmt_start:last_semi]
         for t in stmt_tokens:
-            if t.value in ("break", "return", "goto", "exit", "_Exit", "_exit", "abort"):
+            if t.value in (
+                "break",
+                "return",
+                "goto",
+                "exit",
+                "_Exit",
+                "_exit",
+                "abort",
+            ):
                 return True
             if t.kind in ("KEYWORD", "IDENTIFIER"):
                 break
 
         return False
 
-    def _check_switches(self, code_tokens: List[Token], all_tokens: List[Token], filepath_str: str):
+    def _check_switches(
+        self, code_tokens: List[Token], all_tokens: List[Token], filepath_str: str
+    ):
         """Rules 1.22 ctrl.switch, 1.23 ctrl.switch.fallthrough, 1.24 ctrl.switch.indentation."""
         n = len(code_tokens)
         for i in range(n):
@@ -1439,11 +1764,16 @@ class StyleChecker:
                         if depth == 0:
                             break
                     elif depth == 1:
-                        if code_tokens[k].kind == "KEYWORD" and code_tokens[k].value in ("case", "default"):
+                        if code_tokens[k].kind == "KEYWORD" and code_tokens[
+                            k
+                        ].value in ("case", "default"):
                             if code_tokens[k].value == "default":
                                 has_default = True
                             case_indices.append(k)
-                            if code_tokens[k].col != switch_brace_col and code_tokens[k].col != switch_col:
+                            if (
+                                code_tokens[k].col != switch_brace_col
+                                and code_tokens[k].col != switch_col
+                            ):
                                 self.add_violation(
                                     "1.24 ctrl.switch.indentation",
                                     "Error",
@@ -1491,7 +1821,10 @@ class StyleChecker:
                     if not is_terminated:
                         fallthrough_found = False
                         for all_t in all_tokens:
-                            if all_t.line >= code_tokens[colon_idx].line and all_t.line <= next_bound_line:
+                            if (
+                                all_t.line >= code_tokens[colon_idx].line
+                                and all_t.line <= next_bound_line
+                            ):
                                 if "FALLTHROUGH" in all_t.value.upper():
                                     fallthrough_found = True
                                     break
@@ -1505,7 +1838,9 @@ class StyleChecker:
                                 "Fallthrough in switch case without '/* FALLTHROUGH */' comment",
                             )
 
-    def _skip_balanced_parens(self, tokens: List[Token], open_idx: int) -> Optional[int]:
+    def _skip_balanced_parens(
+        self, tokens: List[Token], open_idx: int
+    ) -> Optional[int]:
         n = len(tokens)
         if open_idx >= n or tokens[open_idx].value != "(":
             return None
@@ -1553,11 +1888,18 @@ class StyleChecker:
                 or pv.endswith("_t")
                 or pv == "..."
             )
-        if first[0].kind in ("KEYWORD", "IDENTIFIER") and first[0].value not in C_KEYWORDS and len(first) == 2 and first[1].value == "*":
+        if (
+            first[0].kind in ("KEYWORD", "IDENTIFIER")
+            and first[0].value not in C_KEYWORDS
+            and len(first) == 2
+            and first[1].value == "*"
+        ):
             return True
         return self._looks_like_decl_start(first, 0)
 
-    def _is_paren_declarator(self, tokens: List[Token], idx: int, is_definite_known: bool) -> bool:
+    def _is_paren_declarator(
+        self, tokens: List[Token], idx: int, is_definite_known: bool
+    ) -> bool:
         n = len(tokens)
         if idx + 2 >= n or tokens[idx + 1].value != "(" or tokens[idx + 2].value != "*":
             return False
@@ -1619,7 +1961,11 @@ class StyleChecker:
 
     def _looks_like_decl_start(self, tokens: List[Token], idx: int) -> bool:
         n = len(tokens)
-        while idx < n and tokens[idx].value in ("__extension__", "__attribute__", "__attribute"):
+        while idx < n and tokens[idx].value in (
+            "__extension__",
+            "__attribute__",
+            "__attribute",
+        ):
             attr_val = tokens[idx].value
             idx += 1
             if attr_val != "__extension__":
@@ -1634,19 +1980,59 @@ class StyleChecker:
         if tok.kind not in ("KEYWORD", "IDENTIFIER"):
             return False
         non_decl_kw = {
-            "if", "else", "for", "while", "do", "switch", "case", "default",
-            "return", "break", "continue", "goto", "sizeof", "_Alignof",
-            "_Static_assert", "_Generic",
+            "if",
+            "else",
+            "for",
+            "while",
+            "do",
+            "switch",
+            "case",
+            "default",
+            "return",
+            "break",
+            "continue",
+            "goto",
+            "sizeof",
+            "_Alignof",
+            "_Static_assert",
+            "_Generic",
         }
         if tok.value in non_decl_kw:
             return False
         decl_kw = {
-            "typedef", "static", "extern", "register", "auto", "inline",
-            "const", "volatile", "restrict", "signed", "unsigned", "short",
-            "long", "void", "char", "int", "float", "double", "struct",
-            "union", "enum", "bool", "_Bool", "_Complex", "_Imaginary",
-            "_Noreturn", "_Thread_local", "_Atomic", "_Alignas",
-            "__inline", "__inline__", "__restrict", "__restrict__",
+            "typedef",
+            "static",
+            "extern",
+            "register",
+            "auto",
+            "inline",
+            "const",
+            "volatile",
+            "restrict",
+            "signed",
+            "unsigned",
+            "short",
+            "long",
+            "void",
+            "char",
+            "int",
+            "float",
+            "double",
+            "struct",
+            "union",
+            "enum",
+            "bool",
+            "_Bool",
+            "_Complex",
+            "_Imaginary",
+            "_Noreturn",
+            "_Thread_local",
+            "_Atomic",
+            "_Alignas",
+            "__inline",
+            "__inline__",
+            "__restrict",
+            "__restrict__",
         }
         if tok.value in decl_kw:
             return True
@@ -1661,13 +2047,19 @@ class StyleChecker:
                     elif tokens[j].value == ")":
                         dp -= 1
                     j += 1
-            return j < n and (tokens[j].kind == "IDENTIFIER" or tokens[j].value in ("*", "(") or tokens[j].value in TYPE_QUALIFIERS)
+            return j < n and (
+                tokens[j].kind == "IDENTIFIER"
+                or tokens[j].value in ("*", "(")
+                or tokens[j].value in TYPE_QUALIFIERS
+            )
 
         if idx + 1 >= n:
             return False
         nxt = tokens[idx + 1]
 
-        is_definite_known = tok.value in STANDARD_TYPES or tok.value in self.known_typedefs
+        is_definite_known = (
+            tok.value in STANDARD_TYPES or tok.value in self.known_typedefs
+        )
         is_heuristic_known = tok.value.startswith("t_") or tok.value.endswith("_t")
 
         if is_definite_known or is_heuristic_known:
@@ -1681,7 +2073,14 @@ class StyleChecker:
             # Unknown IDENTIFIER (e.g., typedef from an external header)
             if nxt.kind == "IDENTIFIER" and nxt.value not in C_KEYWORDS:
                 return True
-            if nxt.value in ("const", "volatile", "restrict", "__restrict", "__restrict__", "_Atomic"):
+            if nxt.value in (
+                "const",
+                "volatile",
+                "restrict",
+                "__restrict",
+                "__restrict__",
+                "_Atomic",
+            ):
                 return True
             if nxt.value == "(":
                 return self._is_paren_declarator(tokens, idx, False)
@@ -1689,9 +2088,14 @@ class StyleChecker:
         if nxt.value == "*":
             j = idx + 2
             spaced_stars = False
-            while j < n and (tokens[j].value == "*" or tokens[j].value in TYPE_QUALIFIERS):
+            while j < n and (
+                tokens[j].value == "*" or tokens[j].value in TYPE_QUALIFIERS
+            ):
                 if tokens[j].value == "*" and tokens[j - 1].value == "*":
-                    if tokens[j].line != tokens[j - 1].line or tokens[j].col != tokens[j - 1].end_col + 1:
+                    if (
+                        tokens[j].line != tokens[j - 1].line
+                        or tokens[j].col != tokens[j - 1].end_col + 1
+                    ):
                         spaced_stars = True
                         break
                 j += 1
@@ -1699,12 +2103,25 @@ class StyleChecker:
                 return False
             if tokens[j].value == "(":
                 return self._is_paren_declarator(tokens, j - 1, is_definite_known)
-            exclude_kw = non_decl_kw if (is_definite_known or is_heuristic_known) else C_KEYWORDS
+            exclude_kw = (
+                non_decl_kw if (is_definite_known or is_heuristic_known) else C_KEYWORDS
+            )
             if tokens[j].kind == "IDENTIFIER" and tokens[j].value not in exclude_kw:
                 after_tok = tokens[j + 1].value if j + 1 < n else None
                 if after_tok not in (
-                    None, ";", "=", ",", "[", "(", ")", ":",
-                    "__attribute__", "__attribute", "asm", "__asm__", "__asm",
+                    None,
+                    ";",
+                    "=",
+                    ",",
+                    "[",
+                    "(",
+                    ")",
+                    ":",
+                    "__attribute__",
+                    "__attribute",
+                    "asm",
+                    "__asm__",
+                    "__asm",
                 ):
                     return False
                 if is_definite_known:
@@ -1712,14 +2129,33 @@ class StyleChecker:
                 if after_tok == "(":
                     close_p = self._skip_balanced_parens(tokens, j + 1)
                     if close_p is not None:
-                        after_val = tokens[close_p + 1].value if close_p + 1 < n else None
-                        return after_val == "{" or self._looks_like_param_list(tokens[j + 2 : close_p])
+                        after_val = (
+                            tokens[close_p + 1].value if close_p + 1 < n else None
+                        )
+                        return after_val == "{" or self._looks_like_param_list(
+                            tokens[j + 2 : close_p]
+                        )
                     return False
-                if after_tok in ("=", ",", "[", ":", "__attribute__", "__attribute", "asm", "__asm__", "__asm"):
+                if after_tok in (
+                    "=",
+                    ",",
+                    "[",
+                    ":",
+                    "__attribute__",
+                    "__attribute",
+                    "asm",
+                    "__asm__",
+                    "__asm",
+                ):
                     return True
                 star_left_glued = nxt.line == tok.line and nxt.col == tok.end_col + 1
-                star_right_glued = tokens[j].line == tokens[j - 1].line and tokens[j].col == tokens[j - 1].end_col + 1
-                has_qual = any(tokens[m].value in TYPE_QUALIFIERS for m in range(idx + 2, j))
+                star_right_glued = (
+                    tokens[j].line == tokens[j - 1].line
+                    and tokens[j].col == tokens[j - 1].end_col + 1
+                )
+                has_qual = any(
+                    tokens[m].value in TYPE_QUALIFIERS for m in range(idx + 2, j)
+                )
                 return star_left_glued or star_right_glued or has_qual
         return False
 
@@ -1743,8 +2179,14 @@ class StyleChecker:
                 if j < n and tokens[j].value == "{":
                     m = skip_balanced(tokens, j, "{", "}") - 1
                     if m < n and tokens[m].value == "}":
-                        inner = tokens[j + 1:m]
-                        self._check_local_declarations(filepath_str, inner, lines_content, line_decls, in_struct=True)
+                        inner = tokens[j + 1 : m]
+                        self._check_local_declarations(
+                            filepath_str,
+                            inner,
+                            lines_content,
+                            line_decls,
+                            in_struct=True,
+                        )
                         k = m + 1
                         continue
             k += 1
@@ -1773,8 +2215,10 @@ class StyleChecker:
             # 1. Typedef statements (Rule 1.36 checked in _check_code_tokens)
             if tok.kind == "KEYWORD" and tok.value == "typedef":
                 k = find_statement_end(code_tokens, i + 1)
-                td_tokens = code_tokens[i:k + 1] if k < n else code_tokens[i:k]
-                self._check_struct_or_union_bodies(filepath_str, td_tokens, lines_content, line_decls)
+                td_tokens = code_tokens[i : k + 1] if k < n else code_tokens[i:k]
+                self._check_struct_or_union_bodies(
+                    filepath_str, td_tokens, lines_content, line_decls
+                )
                 td_decls = extract_declarators_from_decl(td_tokens, self._is_type_token)
                 for vname, vline in td_decls:
                     line_decls.setdefault(vline, []).append(vname)
@@ -1839,11 +2283,17 @@ class StyleChecker:
                         )
                     m = k + 1
                     decl_after_enum = []
-                    while m < n and code_tokens[m].value != ";" and code_tokens[m].value not in ("{", "}"):
+                    while (
+                        m < n
+                        and code_tokens[m].value != ";"
+                        and code_tokens[m].value not in ("{", "}")
+                    ):
                         decl_after_enum.append(code_tokens[m])
                         m += 1
                     if decl_after_enum:
-                        var_names = extract_declarators_from_decl(code_tokens[i:m], self._is_type_token)
+                        var_names = extract_declarators_from_decl(
+                            code_tokens[i:m], self._is_type_token
+                        )
                         is_static = has_top_level_specifier(code_tokens[i:m], "static")
                         has_extern = has_top_level_specifier(code_tokens[i:m], "extern")
                         if not has_extern and not is_header and not is_static:
@@ -1894,7 +2344,8 @@ class StyleChecker:
                         if not has_eq:
                             cand_fn, _ = self._extract_func_info(code_tokens[i:k])
                             if cand_fn is None and any(
-                                t.value in ("struct", "union", "enum") for t in code_tokens[i:k]
+                                t.value in ("struct", "union", "enum")
+                                for t in code_tokens[i:k]
                             ):
                                 b_depth = 1
                                 k += 1
@@ -1932,18 +2383,28 @@ class StyleChecker:
                             exported_funcs_count += 1
                             has_exported_funcs = True
 
-                    self._check_struct_or_union_bodies(filepath_str, func_header_tokens, lines_content, line_decls)
-                    self._check_function_params(filepath_str, func_name, param_tokens, tok.line)
+                    self._check_struct_or_union_bodies(
+                        filepath_str, func_header_tokens, lines_content, line_decls
+                    )
+                    self._check_function_params(
+                        filepath_str, func_name, param_tokens, tok.line
+                    )
 
                     if prev_func_end_line is not None:
                         func_start_line = tok.line
                         between_toks = [
-                            all_t for all_t in all_tokens
-                            if prev_func_end_line < all_t.line and all_t.end_line < tok.line
+                            all_t
+                            for all_t in all_tokens
+                            if prev_func_end_line < all_t.line
+                            and all_t.end_line < tok.line
                         ]
-                        if not any(all_t.kind not in ("COMMENT_LINE", "COMMENT_BLOCK") for all_t in between_toks):
+                        if not any(
+                            all_t.kind not in ("COMMENT_LINE", "COMMENT_BLOCK")
+                            for all_t in between_toks
+                        ):
                             comm_toks = [
-                                all_t for all_t in between_toks
+                                all_t
+                                for all_t in between_toks
                                 if all_t.kind in ("COMMENT_LINE", "COMMENT_BLOCK")
                             ]
                             if comm_toks:
@@ -1959,11 +2420,13 @@ class StyleChecker:
                                 "Function definitions must be separated by one empty line",
                             )
 
-                    self._check_decl_point(filepath_str, func_header_tokens, lines_content)
+                    self._check_decl_point(
+                        filepath_str, func_header_tokens, lines_content
+                    )
 
                     body_start_line = code_tokens[brace_pos].line
                     k = skip_balanced(code_tokens, brace_pos, "{", "}") - 1
-                    body_tokens = code_tokens[brace_pos + 1:k]
+                    body_tokens = code_tokens[brace_pos + 1 : k]
                     body_end_line = code_tokens[k].line if k < n else body_start_line
                     prev_func_end_line = body_end_line
 
@@ -1976,22 +2439,30 @@ class StyleChecker:
                         all_tokens,
                     )
 
-                    self._analyze_body_statements(filepath_str, body_tokens, lines_content, line_decls)
+                    self._analyze_body_statements(
+                        filepath_str, body_tokens, lines_content, line_decls
+                    )
                     i = k + 1
                     continue
 
                 else:
                     k = find_statement_end(code_tokens, i)
 
-                    decl_tokens = code_tokens[i:k + 1] if k < n else code_tokens[i:k]
+                    decl_tokens = code_tokens[i : k + 1] if k < n else code_tokens[i:k]
                     is_static = has_top_level_specifier(decl_tokens, "static")
                     has_extern = has_top_level_specifier(decl_tokens, "extern")
 
-                    self._check_struct_or_union_bodies(filepath_str, decl_tokens, lines_content, line_decls)
+                    self._check_struct_or_union_bodies(
+                        filepath_str, decl_tokens, lines_content, line_decls
+                    )
 
                     has_eq = any(t.value == "=" for t in decl_tokens)
                     has_brace = any(t.value == "{" for t in decl_tokens)
-                    fn_name, p_tokens = self._extract_func_info(decl_tokens) if (not has_eq and not has_brace) else (None, None)
+                    fn_name, p_tokens = (
+                        self._extract_func_info(decl_tokens)
+                        if (not has_eq and not has_brace)
+                        else (None, None)
+                    )
                     if fn_name and p_tokens is not None:
                         if is_source and not is_static and fn_name != "main":
                             self.add_violation(
@@ -2002,8 +2473,12 @@ class StyleChecker:
                                 tok.line,
                                 f"Exported function prototype '{fn_name}' found in source file",
                             )
-                        self._check_function_params(filepath_str, fn_name, p_tokens, tok.line)
-                        proto_vars = extract_declarators_from_decl(decl_tokens, self._is_type_token)
+                        self._check_function_params(
+                            filepath_str, fn_name, p_tokens, tok.line
+                        )
+                        proto_vars = extract_declarators_from_decl(
+                            decl_tokens, self._is_type_token
+                        )
                         if proto_vars:
                             for vname, vline in proto_vars:
                                 line_decls.setdefault(vline, []).append(vname)
@@ -2011,7 +2486,9 @@ class StyleChecker:
                             line_decls.setdefault(tok.line, []).append(fn_name)
                         self._check_decl_point(filepath_str, decl_tokens, lines_content)
                     else:
-                        var_names = extract_declarators_from_decl(decl_tokens, self._is_type_token)
+                        var_names = extract_declarators_from_decl(
+                            decl_tokens, self._is_type_token
+                        )
                         if not has_extern and not is_header and not is_static:
                             exported_globals_count += len(var_names)
                             if exported_globals_count > self.max_exported_globals:
@@ -2114,7 +2591,9 @@ class StyleChecker:
                     f"Source file defining exported functions must include its header ('{header_name}')",
                 )
 
-    def _extract_func_info(self, tokens: List[Token]) -> Tuple[Optional[str], Optional[List[Token]]]:
+    def _extract_func_info(
+        self, tokens: List[Token]
+    ) -> Tuple[Optional[str], Optional[List[Token]]]:
         n = len(tokens)
         idx = 0
         while idx < n - 1:
@@ -2129,7 +2608,15 @@ class StyleChecker:
                         b_depth -= 1
                     idx += 1
                 continue
-            if tv in ("__attribute__", "__attribute", "typeof", "__typeof__", "__typeof", "_Alignas", "__declspec"):
+            if tv in (
+                "__attribute__",
+                "__attribute",
+                "typeof",
+                "__typeof__",
+                "__typeof",
+                "_Alignas",
+                "__declspec",
+            ):
                 idx += 1
                 while idx < n and tokens[idx].value == "(":
                     close_p = self._skip_balanced_parens(tokens, idx)
@@ -2156,7 +2643,9 @@ class StyleChecker:
             idx += 1
         return None, None
 
-    def _check_function_params(self, filepath_str: str, func_name: str, param_tokens: List[Token], line: int):
+    def _check_function_params(
+        self, filepath_str: str, func_name: str, param_tokens: List[Token], line: int
+    ):
         if not param_tokens or len(param_tokens) == 0:
             self.add_violation(
                 "1.7 fun.proto.void",
@@ -2220,7 +2709,9 @@ class StyleChecker:
             i += 1
         return cleaned
 
-    def _check_decl_point(self, filepath_str: str, tokens: List[Token], lines_content: List[str]):
+    def _check_decl_point(
+        self, filepath_str: str, tokens: List[Token], lines_content: List[str]
+    ):
         """Rule 1.26 decl.point (MUST): Pointer * next to variable name, not type."""
         cleaned = self._strip_decl_for_point(tokens)
         for idx in range(len(cleaned)):
@@ -2231,14 +2722,21 @@ class StyleChecker:
                     is_type_prev = (
                         self._is_type_token(prev_tok.value)
                         or prev_tok.value in TYPE_QUALIFIERS
-                        or (idx >= 2 and cleaned[idx - 2].value in ("struct", "union", "enum"))
+                        or (
+                            idx >= 2
+                            and cleaned[idx - 2].value in ("struct", "union", "enum")
+                        )
                         or (
                             prev_tok.kind == "IDENTIFIER"
                             and prev_tok.value not in C_KEYWORDS
                             and (idx == 1 or cleaned[idx - 2].value in ("(", ","))
                         )
                     )
-                    if is_type_prev and tok.line == prev_tok.line and tok.col == prev_tok.end_col + 1:
+                    if (
+                        is_type_prev
+                        and tok.line == prev_tok.line
+                        and tok.col == prev_tok.end_col + 1
+                    ):
                         self.add_violation(
                             "1.26 decl.point",
                             "Error",
@@ -2289,7 +2787,8 @@ class StyleChecker:
                 continue
             if l in comment_lines_set:
                 has_code = any(
-                    t.line == l and t.kind not in ("COMMENT_BLOCK", "COMMENT_LINE") for t in all_tokens
+                    t.line == l and t.kind not in ("COMMENT_BLOCK", "COMMENT_LINE")
+                    for t in all_tokens
                 )
                 if not has_code:
                     continue
@@ -2340,7 +2839,13 @@ class StyleChecker:
             if tok.value == "{":
                 j = skip_balanced(tokens, i, "{", "}") - 1
                 if not in_struct:
-                    self._check_local_declarations(filepath_str, tokens[i + 1:j], lines_content, line_decls, in_struct=False)
+                    self._check_local_declarations(
+                        filepath_str,
+                        tokens[i + 1 : j],
+                        lines_content,
+                        line_decls,
+                        in_struct=False,
+                    )
                 i = j + 1
                 continue
 
@@ -2349,10 +2854,19 @@ class StyleChecker:
                 continue
 
             if not in_struct:
-                if tok.kind == "IDENTIFIER" and i + 1 < n and tokens[i + 1].value == ":":
+                if (
+                    tok.kind == "IDENTIFIER"
+                    and i + 1 < n
+                    and tokens[i + 1].value == ":"
+                ):
                     i += 2
                     continue
-                if tok.kind == "KEYWORD" and tok.value == "default" and i + 1 < n and tokens[i + 1].value == ":":
+                if (
+                    tok.kind == "KEYWORD"
+                    and tok.value == "default"
+                    and i + 1 < n
+                    and tokens[i + 1].value == ":"
+                ):
                     i += 2
                     continue
                 if tok.kind == "KEYWORD" and tok.value == "case":
@@ -2384,7 +2898,7 @@ class StyleChecker:
                         j += 1
                     if j < n:
                         end_p = skip_balanced(tokens, j, "(", ")")
-                        inner_for = tokens[j + 1:end_p - 1]
+                        inner_for = tokens[j + 1 : end_p - 1]
                         semi_idx = None
                         dp = db = dk = 0
                         for idx_f, ft in enumerate(inner_for):
@@ -2403,9 +2917,13 @@ class StyleChecker:
                             elif ft.value == ";" and dp == 0 and db == 0 and dk == 0:
                                 semi_idx = idx_f
                                 break
-                        for_init = inner_for[:semi_idx] if semi_idx is not None else inner_for
+                        for_init = (
+                            inner_for[:semi_idx] if semi_idx is not None else inner_for
+                        )
                         if for_init and self._looks_like_decl_start(for_init, 0):
-                            self._check_decl_point(filepath_str, for_init, lines_content)
+                            self._check_decl_point(
+                                filepath_str, for_init, lines_content
+                            )
                         i = end_p
                     else:
                         i += 1
@@ -2447,9 +2965,13 @@ class StyleChecker:
                     k += 1
 
                 if k < n and tokens[k].value == ";":
-                    decl_tokens = tokens[i:k + 1]
-                    self._check_struct_or_union_bodies(filepath_str, decl_tokens, lines_content, line_decls)
-                    var_names = extract_declarators_from_decl(decl_tokens, self._is_type_token)
+                    decl_tokens = tokens[i : k + 1]
+                    self._check_struct_or_union_bodies(
+                        filepath_str, decl_tokens, lines_content, line_decls
+                    )
+                    var_names = extract_declarators_from_decl(
+                        decl_tokens, self._is_type_token
+                    )
                     for vname, vline in var_names:
                         line_decls.setdefault(vline, []).append(vname)
                     self._check_decl_point(filepath_str, decl_tokens, lines_content)
@@ -2483,7 +3005,7 @@ class StyleChecker:
                             if (
                                 open_p >= i
                                 and tokens[open_p].kind == "IDENTIFIER"
-                                and "=" not in [t.value for t in tokens[i:open_p + 1]]
+                                and "=" not in [t.value for t in tokens[i : open_p + 1]]
                             ):
                                 break
                     db += 1
@@ -2510,7 +3032,9 @@ class StyleChecker:
         lines_content: List[str],
         line_decls: Dict[int, List[str]],
     ):
-        self._check_local_declarations(filepath_str, body_tokens, lines_content, line_decls)
+        self._check_local_declarations(
+            filepath_str, body_tokens, lines_content, line_decls
+        )
 
         n = len(body_tokens)
         i = 0
@@ -2522,8 +3046,13 @@ class StyleChecker:
             if tok.value == "[" and i >= 2:
                 ident_tok = body_tokens[i - 1]
                 type_tok = body_tokens[i - 2]
-                is_type = self._is_type_token(type_tok.value) or type_tok.value == "*" or (
-                    i >= 3 and body_tokens[i - 3].value in ("struct", "union", "enum")
+                is_type = (
+                    self._is_type_token(type_tok.value)
+                    or type_tok.value == "*"
+                    or (
+                        i >= 3
+                        and body_tokens[i - 3].value in ("struct", "union", "enum")
+                    )
                 )
                 if ident_tok.kind == "IDENTIFIER" and is_type:
                     k = i + 1
@@ -2538,7 +3067,10 @@ class StyleChecker:
                             dt = dim_tokens[dt_idx]
                             if dt.value == "sizeof":
                                 dt_idx += 1
-                                if dt_idx < len(dim_tokens) and dim_tokens[dt_idx].value == "(":
+                                if (
+                                    dt_idx < len(dim_tokens)
+                                    and dim_tokens[dt_idx].value == "("
+                                ):
                                     p_depth = 1
                                     dt_idx += 1
                                     while dt_idx < len(dim_tokens) and p_depth > 0:
@@ -2580,7 +3112,10 @@ class StyleChecker:
                             if k + 1 < n:
                                 next_tok = body_tokens[k + 1]
                                 # Single line loop body must be on next line (if not '{')
-                                if next_tok.value != "{" and next_tok.line == closing_paren.line:
+                                if (
+                                    next_tok.value != "{"
+                                    and next_tok.line == closing_paren.line
+                                ):
                                     self.add_violation(
                                         "1.21 ctrl.empty",
                                         "Error",
@@ -2598,7 +3133,11 @@ class StyleChecker:
                                         next_tok.line,
                                         "Empty loop body must be 'continue;'",
                                     )
-                                elif next_tok.value == "{" and k + 2 < n and body_tokens[k + 2].value == "}":
+                                elif (
+                                    next_tok.value == "{"
+                                    and k + 2 < n
+                                    and body_tokens[k + 2].value == "}"
+                                ):
                                     self.add_violation(
                                         "1.21 ctrl.empty",
                                         "Error",
@@ -2617,7 +3156,11 @@ class StyleChecker:
                     k = skip_balanced(body_tokens, k, "{", "}") - 1
                     if k < n and body_tokens[k].value == "}":
                         closing_brace = body_tokens[k]
-                        if k + 1 < n and body_tokens[k + 1].kind == "KEYWORD" and body_tokens[k + 1].value == "while":
+                        if (
+                            k + 1 < n
+                            and body_tokens[k + 1].kind == "KEYWORD"
+                            and body_tokens[k + 1].value == "while"
+                        ):
                             while_tok = body_tokens[k + 1]
                             if while_tok.line != closing_brace.line:
                                 self.add_violation(
@@ -2643,7 +3186,9 @@ class StyleChecker:
 
             i += 1
 
-    def _parse_cast_type(self, tokens: List[Token], paren_idx: int) -> Tuple[Optional[str], int]:
+    def _parse_cast_type(
+        self, tokens: List[Token], paren_idx: int
+    ) -> Tuple[Optional[str], int]:
         k = paren_idx + 1
         depth = 1
         inner_tokens = []
@@ -2680,7 +3225,7 @@ class StyleChecker:
                 idx += 1
                 is_type = True
             elif inner_tokens[idx].kind == "IDENTIFIER":
-                if any(t.value == "*" for t in inner_tokens[idx+1:]):
+                if any(t.value == "*" for t in inner_tokens[idx + 1 :]):
                     type_parts.append(inner_tokens[idx].value)
                     idx += 1
                     is_type = True
@@ -2689,7 +3234,10 @@ class StyleChecker:
             return None, k
 
         while idx < len(inner_tokens):
-            if inner_tokens[idx].value in TYPE_QUALIFIERS or inner_tokens[idx].value == "*":
+            if (
+                inner_tokens[idx].value in TYPE_QUALIFIERS
+                or inner_tokens[idx].value == "*"
+            ):
                 type_parts.append(inner_tokens[idx].value)
                 idx += 1
             else:
@@ -2722,7 +3270,9 @@ class StyleChecker:
             p -= 1
         return False
 
-    def _is_brace_initializer_or_enum(self, tokens: List[Token], brace_idx: int) -> bool:
+    def _is_brace_initializer_or_enum(
+        self, tokens: List[Token], brace_idx: int
+    ) -> bool:
         prev = tokens[brace_idx - 1] if brace_idx > 0 else None
         if prev:
             if prev.value in ("=", "enum"):
@@ -2760,7 +3310,12 @@ class StyleChecker:
                             elif tokens[q].value == "(":
                                 dp -= 1
                             q -= 1
-                        if q < 0 or tokens[q].value not in ("if", "while", "for", "switch"):
+                        if q < 0 or tokens[q].value not in (
+                            "if",
+                            "while",
+                            "for",
+                            "switch",
+                        ):
                             return True
             elif b_depth == 0:
                 if v in ("=", "enum"):
@@ -2817,14 +3372,25 @@ class StyleChecker:
                             is_tag_or_init = True
                         else:
                             scan = open_brace - 1
-                            while scan >= 0 and tokens[scan].value not in (";", "{", "}"):
-                                if tokens[scan].value in ("struct", "union", "enum", "="):
+                            while scan >= 0 and tokens[scan].value not in (
+                                ";",
+                                "{",
+                                "}",
+                            ):
+                                if tokens[scan].value in (
+                                    "struct",
+                                    "union",
+                                    "enum",
+                                    "=",
+                                ):
                                     is_tag_or_init = True
                                     break
                                 scan -= 1
                     if not is_tag_or_init:
                         stmt_start = k + 1
-                        if stmt_start < len(tokens) and self._looks_like_decl_start(tokens, stmt_start):
+                        if stmt_start < len(tokens) and self._looks_like_decl_start(
+                            tokens, stmt_start
+                        ):
                             return True
                         return False
                 depth_brace += 1
@@ -2835,14 +3401,23 @@ class StyleChecker:
                     if self._is_brace_initializer_or_enum(tokens, k):
                         return True
                     stmt_start = k + 1
-                    if stmt_start < len(tokens) and self._looks_like_decl_start(tokens, stmt_start):
+                    if stmt_start < len(tokens) and self._looks_like_decl_start(
+                        tokens, stmt_start
+                    ):
                         return True
                     return False
-            elif tok.value == ";" and depth_paren == 0 and depth_brace == 0 and depth_bracket == 0:
+            elif (
+                tok.value == ";"
+                and depth_paren == 0
+                and depth_brace == 0
+                and depth_bracket == 0
+            ):
                 if self._is_inside_for_header(tokens, k):
                     return True
                 stmt_start = k + 1
-                if stmt_start < len(tokens) and self._looks_like_decl_start(tokens, stmt_start):
+                if stmt_start < len(tokens) and self._looks_like_decl_start(
+                    tokens, stmt_start
+                ):
                     return True
                 return False
             k -= 1
@@ -2891,15 +3466,17 @@ def print_report(
 
     sorted_groups = sorted(groups.items(), key=group_sort_key)
 
-    COLOR_RED = "[31m"
-    COLOR_YELLOW = "[33m"
-    COLOR_WHITE = "[97m"
-    COLOR_LIGHT_GRAY = "[37m"
-    COLOR_RESET = "[0m"
+    COLOR_RED = "\x1b[31m"
+    COLOR_YELLOW = "\x1b[33m"
+    COLOR_WHITE = "\x1b[97m"
+    COLOR_LIGHT_GRAY = "\x1b[37m"
+    COLOR_RESET = "\x1b[0m"
 
     for (rule_id, severity, description), v_list in sorted_groups:
         sev_color = COLOR_RED if severity == "Error" else COLOR_YELLOW
-        print(f"[[{sev_color}{severity}{COLOR_RESET}]] {COLOR_WHITE}{rule_id}: {description}{COLOR_RESET}")
+        print(
+            f"[[{sev_color}{severity}{COLOR_RESET}]] {COLOR_WHITE}{rule_id}: {description}{COLOR_RESET}"
+        )
         sorted_violations = sorted(
             v_list,
             key=lambda v: (
@@ -2924,9 +3501,7 @@ def print_report(
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Coding Style Checker (v1.0.0)"
-    )
+    parser = argparse.ArgumentParser(description="Coding Style Checker (v1.0.0)")
     parser.add_argument(
         "path",
         help="Root directory to recursively scan for .c and .h files",
@@ -2997,8 +3572,8 @@ def main():
         help="Specify the max allowed explicit C casts across non-test files (defaults to 0)",
     )
     parser.add_argument(
-        "--IgnoreW",
         "--ignore-w",
+        "--ignore-warnings",
         action="store_true",
         dest="ignore_w",
         help="Ignore warning checks",
